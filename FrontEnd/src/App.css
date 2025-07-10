@@ -1,0 +1,68 @@
+*{
+  /* margin: 0;
+  padding: 0; */
+  box-sizing: border-box;
+}
+
+.page-size{
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+input{
+  width: 100%;
+  display: block;
+  border: 3px solid rgb(30, 111, 203);
+  height: 6vh;
+  border-radius: 5px;
+  padding-left: 15px;
+  margin-top: 10px;
+}
+input:focus{
+  box-shadow: var(--box-shawdo)
+}
+select{
+  width: 100%;
+  height: 6vh;
+  display: block;
+  border: 2.5px solid rgb(30, 111, 203);
+  padding-left: 10px;
+  border-radius: 5px;
+}
+select:focus,textarea:focus{
+  box-shadow: var(--box-shawdo)
+}
+.control-select{
+  width: 47%;
+}
+textarea{
+  width: 100%;
+  display: block;
+  border: 2.5px solid rgb(30, 111, 203);
+  border-radius: 5px;
+  padding: 10px 0px 0px 15px;
+}
+.control h1{
+  font-size: 35px;
+}
+.t{
+  width: 100%;
+  height: 90%;
+}
+table{
+  width: 90%;
+}
+
+.Analyst{
+  width: 100%;
+  height: 90vh;
+  display: flex;
+  justify-content: space-between;
+}
+.Summary-Cards{
+  width: 40vw;
+  height: 80vh;
+  background-color: darkblue;
+}

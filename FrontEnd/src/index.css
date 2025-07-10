@@ -1,0 +1,4 @@
+@import "tailwindcss";
+:root{
+    --box-shawdo: 1px 1px 15px rgb(26, 136, 215);
+  }

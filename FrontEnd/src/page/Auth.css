@@ -1,0 +1,105 @@
+.auth-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  background: whitesmoke;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.auth-form {
+  display: flex;
+  justify-content: center;
+  /* align-items: center;  */
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-form input {
+  display: flex;
+  justify-content: center;
+  width: 95%;
+  padding: 10px;
+  border: 1px solid #959393;
+  border-radius: 5px;
+   
+}
+
+.auth-form button {
+  padding: 10px;
+  background-color: #00aaff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.auth-form button:hover {
+  background-color: #0088cc;
+}
+.switch-link {
+  color: #00aaff;
+  cursor: pointer;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.social-icons img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.Check-input {
+display: flex;
+align-items: self-start;
+justify-content: flex-start;
+margin-bottom: 10px;
+}
+
+.Check-input input[type="checkbox"] {
+width: 16px;
+height: 16px;
+accent-color: #007bff; 
+cursor: pointer;
+}
+
+/* Label for the checkbox */
+.Check-input label {
+font-size: 14px;
+color: #333;
+cursor: pointer;
+margin-left: 5px;
+}
+
+
+
+@media screen and (max-width: 768px) {
+.auth-container {
+  width: 80%;
+}
+
+.auth-form input {
+  font-size: 15px;
+}
+
+.auth-form button {
+  font-size: 15px;
+}
+}
+
+@media screen and (max-width: 1024px) {
+.auth-container {
+  max-width: 350px;
+}
+}
