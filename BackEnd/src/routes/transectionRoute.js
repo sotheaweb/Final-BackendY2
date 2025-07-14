@@ -1,9 +1,10 @@
 import express from 'express';
-import { getAllImformation, create, deleteInfo } from '../controllers/transectionController.js';
+import { getAllTransactions, createTransaction, deleteTransaction } from '../controllers/transectionController.js';
+import { verifyToken } from '../middlewares/authMiddleware.js';
 
 const transectionRouter = express.Router();
-transectionRouter.get('/', getAllImformation);
-transectionRouter.post('/', create);
-transectionRouter.delete('/:id', deleteInfo);
+transectionRouter.get('/', verifyToken, getAllTransactions);
+transectionRouter.post('/create', verifyToken, createTransaction);
+transectionRouter.delete('/:id', verifyToken,  deleteTransaction);
 
 export default transectionRouter;

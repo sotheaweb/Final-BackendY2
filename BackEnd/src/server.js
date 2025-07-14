@@ -2,6 +2,7 @@ import express, { json } from 'express';
 import { sequelize } from './utils/database.js';
 import cors from 'cors';
 import transectionRuter from './routes/transectionRoute.js';
+import userRouter from './routes/userRouter.js';
 import User from './models/User.js';
 import Transaction from './models/Transaction.js';
 
@@ -12,7 +13,11 @@ app.use(cors())
 
 app.use(json())
 
-app.use('/api', transectionRuter)
+//Transactions
+app.use('/api/transaction', transectionRuter);
+
+//User
+app.use('/api/user', userRouter);
 
 
 const startServer = async () =>{

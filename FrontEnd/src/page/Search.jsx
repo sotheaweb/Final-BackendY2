@@ -9,7 +9,12 @@ const Search = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get("http://localhost:8180/api");
+        const token = localStorage.getItem("token")
+        const response = await axios.get("http://localhost:8180/api/transaction",{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }
+        });
         setTransactions(response.data);
         setFilteredTransactions([]); // no initial filtered data until search clicked
       } catch (error) {

@@ -10,7 +10,12 @@ const ShowContent = ({ expenses, setExpenses }) => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:8180/api/${id}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:8180/api/transaction/${id}`,{
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       // ✅ Remove the deleted item from the state
       setExpenses(expenses.filter(item => item.id !== id));
     } 

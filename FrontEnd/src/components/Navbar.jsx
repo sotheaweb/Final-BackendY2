@@ -35,7 +35,7 @@ const Navbar = () => {
             { name: 'Add Content', to: '/add-cotent' },
             { name: 'Show Content', to: '/show-cotent' },
             { name: 'Search', to: '/search' },
-            { name: 'Login', to: '/sigin' },
+            { name: 'Login', to: '/signin' },
             { name: 'Analysist', to: '/analyst' },
           ].map((link, index) => (
             <li key={index}>

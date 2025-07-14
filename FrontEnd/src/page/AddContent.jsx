@@ -15,6 +15,8 @@ const AddContent = ({expenses, setExpenses}) => {
   const outcomeCategories= ['Daily Basis','Health Care','Entertainment','Saving','Tripes','Other'];
   const categoryOptions = (type == 'Income') ? incomeCategories : outcomeCategories;
 
+  const user_id = localStorage.getItem("user_id")
+
    // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,12 +33,24 @@ const AddContent = ({expenses, setExpenses}) => {
       title, 
       type, 
       category, 
-      amount, 
+      amount: parseFloat(amount), 
       transaction_date: date, 
-      remark}
+      remark,
+      user_id: parseInt(user_id)
+    }
+    console.log(newTransaction);
+    
 
     try{
-      await axios.post("http://localhost:8180/api", newTransaction);
+      await axios.post(
+        "http://localhost:8180/api/transaction/create",
+        newTransaction,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        } 
+      );
       console.log("Sending:", newTransaction);
       setExpenses([...expenses, newTransaction]);
       toast.success('Transaction added successfully.', {

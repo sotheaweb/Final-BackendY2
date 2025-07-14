@@ -15,13 +15,20 @@ import axios from 'axios'
 
 function App() {
   const [expenses, setExpenses] = useState([]);
-
+  
     // ✅ Fetch data from API once when component mounts
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await axios.get('http://localhost:8180/api'); // change the URL if different
-        setExpenses(response.data); // store results in state
+        const token = localStorage.getItem("token"); // ✅ យក token ពី localStorage
+
+        const response = await axios.get('http://localhost:8180/api/transaction', {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ បញ្ជូល token ក្នុង headers
+          },
+        });
+
+        setExpenses(response.data); // ✅ ផ្ទុក data ទៅក្នុង state
       } catch (error) {
         console.error("Error fetching data from database:", error);
       }
@@ -29,6 +36,7 @@ function App() {
 
     fetchExpenses();
   }, []);
+
 
   return (
     <div>
@@ -39,7 +47,7 @@ function App() {
         <Route path='/add-cotent' element={<AddContent expenses={expenses} setExpenses={setExpenses}/>} />
         <Route path='/show-cotent' element={<ShowContent expenses={expenses} setExpenses={setExpenses} />} />
         <Route path='/sigup' element={<SignUp />} />
-        <Route path='/sigin' element={<Sigin/>} />
+        <Route path='/signin' element={<Sigin/>} />
         <Route path='/search' element={<Search expenses={expenses} setExpenses={setExpenses}/>} />
         <Route path='/analyst' element={<Analyst />}/>
       </Routes>

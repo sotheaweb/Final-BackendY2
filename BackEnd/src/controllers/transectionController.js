@@ -1,34 +1,37 @@
-import * as sqlTransection  from '../repositories/sqlTransectionRepositories.js'
+import * as transactionService from "../services/transactionService.js";
 
-export async function getAllImformation(req, res) {
-    try{
-        const imformations = await sqlTransection.getImformation();
-        res.json(imformations);
-    }
-    catch (error){
-        console.error("Error fetching Imformation", error);
-        throw error;
-    }
-}
+// Get All Transactions for logged-in user
+export const getAllTransactions = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const data = await transactionService.getAll(userId);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching transactions", error });
+  }
+};
 
-export async function create(req, res) {
-    try{
-        const data = req.body
-        const newInfo = await sqlTransection.create(data);
-        res.status(201).json(newInfo);
-    }
-    catch (error){
-    console.error("Error creating neInfo:", error);
-    }
-}
+// Create Transaction
+export const createTransaction = async (req, res) => {
+  try {
+    const dataWithUser = {
+      ...req.body,
+      user_id: req.user.id, // add user ID from token
+    };
 
-export async function deleteInfo(req, res) {
-    try{
-        await sqlTransection.deleteInfo(req.params.id);
-        res.status(204).json({message: "Delete successfuly!"});
-    } 
-    catch (error){
-        console.error("Error deleting Info:", error);
-        res.status(500).json({message: "Server Error!"});
-    }
-}
+    const newData = await transactionService.create(dataWithUser);
+    res.status(201).json(newData);
+  } catch (error) {
+    res.status(400).json({ message: "Failed to create transaction", error });
+  }
+};
+
+// Delete Transaction (you can also restrict to the same user's transaction)
+export const deleteTransaction = async (req, res) => {
+  try {
+    await transactionService.remove(req.params.id, req.user.id);
+    res.status(204).send();
+  } catch (error) {
+    res.status(404).json({ message: "Transaction not found", error });
+  }
+};

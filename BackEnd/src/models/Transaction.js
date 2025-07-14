@@ -2,15 +2,37 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../utils/database.js";
 
 const Transaction = sequelize.define('Transaction', {
-  title: DataTypes.STRING,
-  type: DataTypes.STRING,
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  title: {
+    type: DataTypes.STRING,
+    allowNull: false, 
+  },
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   category: DataTypes.STRING,
-  amount: DataTypes.FLOAT,
-  transaction_date: DataTypes.DATE,
+  amount: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  transaction_date: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
   remark: DataTypes.STRING,
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false, 
+  },
 }, {
   tableName: 'transactions',
-  timestamps: false, // if your table doesn't have createdAt, updatedAt
+  timestamps: true, 
 });
+
 
 export default Transaction;

@@ -1,68 +1,66 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaInstagramSquare } from "react-icons/fa";
-import { IoLogoLinkedin } from "react-icons/io5"; 
+import { IoLogoLinkedin } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Sigin = () => {
   const [formData, setFormData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
-
-  const [error, setError] = useState(""); // Store error messages
-  const navigate = useNavigate(); // Hook for navigation
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Get stored user data from localStorage
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    try {
+      const response = await axios.post("http://localhost:8180/api/user/login", formData);
+      const { token, user } = response.data;
+      
+      // Save token and user ID in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("user_id", user.id);
 
-    if (!storedUser) {
-      setError("No user found. Please sign up first.");
-      return;
-    }
-
-    // Check if email and password match
-    if (formData.email === storedUser.email && formData.password === storedUser.password) {
       alert("Login successful!");
-      navigate("/"); // Redirect to home page
-    } else {
-      setError(<span className="text-red-500">Incorrect email or password. Please try again.</span>);
+      navigate("/");
+
+    } catch (err) {
+      setError("Username or password is incorrect");
     }
   };
 
   return (
     <div className="auth-container">
       <h2>Login</h2>
-      
-      {error && <p className="error-message">{error}</p>} {/* Show error message */}
+
+      {error && <p className="error-message text-red-500">{error}</p>}
 
       <form className="auth-form" onSubmit={handleSubmit}>
-        <input 
-          type="email" 
-          name="email" 
-          placeholder="Enter Email" 
-          value={formData.email}  
-          onChange={handleChange} 
-          required 
+        <input
+          type="text"
+          name="username"
+          placeholder="Enter Username"
+          value={formData.username}
+          onChange={handleChange}
+          required
         />
-        <input 
-          type="password" 
-          name="password" 
-          placeholder="Password" 
-          value={formData.password} 
-          onChange={handleChange} 
-          required 
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
         />
-        
+
         <div className="Check-input">
           <input type="checkbox" id="user-check" />
           <label htmlFor="user-check" className="mt-2">Remember me</label>
@@ -70,7 +68,7 @@ const Sigin = () => {
 
         <button type="submit" className="transition delay-100 cursor-pointer">Login</button>
       </form>
-      
+
       <p>Continue with</p>
       <div className="social-icons">
         <a href="https://www.google.com" target="_blank" rel="noopener noreferrer"><FcGoogle size={25} /></a>
@@ -79,11 +77,11 @@ const Sigin = () => {
         <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagramSquare size={25} color="#E4405F" /></a>
       </div>
 
-      <p>Don't you have an account?          
-        <span className="text-blue-600 " onClick={() => setCurrentPage("SigUp")}>
-             <Link to='/sigup'> Sign up</Link>
+      <p>Don't have an account?
+        <span className="text-blue-600">
+          <Link to='/sigup'> Sign up</Link>
         </span>
-     </p>
+      </p>
     </div>
   );
 };
