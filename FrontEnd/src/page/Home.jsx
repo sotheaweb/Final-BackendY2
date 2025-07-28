@@ -2,8 +2,8 @@ import React from 'react';
 import { FaArrowCircleUp, FaArrowCircleDown } from 'react-icons/fa';
 
 const Home = ({ expenses }) => {
-  const countIncome = expenses.filter(e => e.type === 'Income').length;
-  const countExpense = expenses.filter(e => e.type === 'Expense').length;
+  const countIncome = expenses.filter(e => e.type === 'income').length;
+  const countExpense = expenses.filter(e => e.type === 'expense').length;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-100 flex flex-col items-center justify-center px-4">

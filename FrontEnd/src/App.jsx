@@ -7,6 +7,7 @@ import ShowContent from './page/ShowContent'
 import Search from './page/Search'
 import SignUp from './page/SignUp'
 import Analyst from './page/Analyst'
+import UpdateTransaction from './page/Update'
 import { ToastContainer } from 'react-toastify'
 import { useEffect, useState } from 'react'
 import Sigin from'./page/Sigin'
@@ -50,6 +51,7 @@ function App() {
         <Route path='/signin' element={<Sigin/>} />
         <Route path='/search' element={<Search expenses={expenses} setExpenses={setExpenses}/>} />
         <Route path='/analyst' element={<Analyst />}/>
+        <Route path="/update/:id" element={<UpdateTransaction />} />  
       </Routes>
     </div>
   )

@@ -1,78 +1,168 @@
-import { PieChart, Pie, Cell, Tooltip, BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from "recharts";
+import React, { useState, useEffect } from 'react';
+import { Filler } from 'chart.js';
+import { Bar, Doughnut, Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import axios from 'axios';
 
-const transactionData = [
-  { month: "Jan", income: 3200, expense: 2100 },
-  { month: "Feb", income: 2800, expense: 1700 },
-  { month: "Mar", income: 3500, expense: 1900 },
-  { month: "Apr", income: 4000, expense: 2200 },
-  { month: "May", income: 3000, expense: 2500 },
-  { month: "Jun", income: 4500, expense: 2400 },
-  { month: "Jul", income: 3800, expense: 2000 },
-  { month: "Aug", income: 4200, expense: 2100 },
-  { month: "Sep", income: 3700, expense: 2300 },
-  { month: "Oct", income: 3900, expense: 1900 },
-  { month: "Nov", income: 4100, expense: 2000 },
-  { month: "Dec", income: 4300, expense: 2200 },
-];
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+  Filler
+);
 
+const Analyst = () => {
+  const [selectedDate, setSelectedDate] = useState('2025-01');
+  const [summary, setSummary] = useState({
+    totalIncome: 0,
+    totalExpense: 0,
+    balance: 0,
+    expenseBreakdown: {},
+    incomeBreakdown: {},
+    cashFlow: {},
+  });
+  const [loading, setLoading] = useState(false);
 
-const income = 3000;
-const expense = 1500;
-const balance = income - expense;
+  const selectedYear = selectedDate.split('-')[0];
+  const selectedMonth = new Date(`${selectedDate}-01`).toLocaleString('default', { month: 'short' });
 
-const pieData = [
-  { name: "ចំណូល", value: income },
-  { name: "ចំណាយ", value: expense }
-];
+  useEffect(() => {
+    const fetchSummary = async () => {
+      try {
 
-const COLORS = ["#00C49F", "#FF8042"];
+        setLoading(true);
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`http://localhost:8180/api/analyst?month=${selectedDate}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        
+        
+        setSummary(response.data);
+      } catch (err) {
+        console.error('Error fetching summary:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-export default function AnalystPage() {
+    fetchSummary();
+  }, [selectedDate]);
+
+  const { totalIncome, totalExpense, balance, incomeBreakdown, expenseBreakdown, cashFlow } = summary;
+
+  const doughnutExpenses = {
+    labels: Object.keys(expenseBreakdown),
+    datasets: [
+      {
+        data: Object.values(expenseBreakdown),
+        backgroundColor: ['#3B82F6', '#10B981', '#FACC15', '#EF4444', '#A855F7', '#6366F1'],
+      },
+    ],
+  };
+
+  const doughnutIncome = {
+    labels: Object.keys(incomeBreakdown),
+    datasets: [
+      {
+        data: Object.values(incomeBreakdown),
+        backgroundColor: ['#3B82F6', '#10B981', '#F59E0B', '#E879F9'],
+      },
+    ],
+  };
+
+  const daysInMonth = Array.from({ length: 31 }, (_, i) => i + 1);
+  const lineData = {
+    labels: daysInMonth,
+    datasets: [
+      {
+        label: 'Cash Flow',
+        data: daysInMonth.map((d) => cashFlow[d] || 0),
+        borderColor: '#3B82F6',
+        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+        tension: 0.4,
+        fill: true,
+      },
+    ],
+  };
+
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center">ទំព័រ វិភាគហិរញ្ញវត្ថុ</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white p-4 rounded-2xl shadow">
-          <h2 className="text-lg font-semibold">ចំណូលសរុប</h2>
-          <p className="text-green-500 text-2xl font-bold">${income}</p>
-        </div>
-        <div className="bg-white p-4 rounded-2xl shadow">
-          <h2 className="text-lg font-semibold">ចំណាយសរុប</h2>
-          <p className="text-red-500 text-2xl font-bold">${expense}</p>
-        </div>
-        <div className="bg-white p-4 rounded-2xl shadow">
-          <h2 className="text-lg font-semibold">សមតុល្យ</h2>
-          <p className="text-blue-500 text-2xl font-bold">${balance}</p>
+    <div className="p-4 max-w-screen-lg mx-auto">
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-2 mb-4">
+        <h1 className="text-xl font-bold text-gray-800"> Income & Expense Report</h1>
+        <div className="flex items-center gap-2 text-sm">
+          <label htmlFor="datePicker">Select:</label>
+          <input
+            id="datePicker"
+            type="month"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className="border px-2 py-1 rounded text-sm"
+          />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-4 rounded-2xl shadow">
-          <h2 className="text-xl font-bold mb-4">Pie Chart</h2>
-          <PieChart width={300} height={300}>
-            <Pie data={pieData} dataKey="value" outerRadius={100} label>
-              {pieData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </div>
+      <p className="text-gray-600 text-sm mb-4 text-center">
+        <strong>{selectedMonth} {selectedYear}</strong>
+      </p>
 
-        <div className="bg-white p-4 rounded-2xl shadow">
-          <h2 className="text-xl font-bold mb-4">Bar Chart (Month)</h2>
-          <BarChart width={400} height={300} data={transactionData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="income" fill="#00C49F" />
-            <Bar dataKey="expense" fill="#FF8042" />
-          </BarChart>
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 text-sm">
+        <div className="bg-white shadow-sm p-3 rounded border-l-4 border-green-500">
+          <p className="text-gray-500">Income</p>
+          <p className="text-green-600 font-semibold text-lg">
+            {loading ? 'Loading...' : `$${totalIncome?.toLocaleString()}`}
+          </p>
+        </div>
+        <div className="bg-white shadow-sm p-3 rounded border-l-4 border-red-500">
+          <p className="text-gray-500">Expenses</p>
+          <p className="text-red-600 font-semibold text-lg">
+            {loading ? 'Loading...' : `$${totalExpense?.toLocaleString()}`}
+          </p>
+        </div>
+        <div className="bg-white shadow-sm p-3 rounded border-l-4 border-blue-500">
+          <p className="text-gray-500">Balance</p>
+          <p className={`font-semibold text-lg ${balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>
+            {loading ? 'Loading...' : `$${balance?.toLocaleString()}`}
+          </p>
+        </div>
+      </div>
+
+      {/* Charts Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white p-3 rounded shadow-sm">
+          <h2 className="text-sm font-semibold mb-2">Expense Breakdown</h2>
+          <Doughnut data={doughnutExpenses} />
+        </div>
+        <div className="bg-white p-3 rounded shadow-sm">
+          <h2 className="text-sm font-semibold mb-2">Income Sources</h2>
+          <Doughnut data={doughnutIncome} />
+        </div>
+        <div className="bg-white p-3 rounded shadow-sm md:col-span-2">
+          <h2 className="text-sm font-semibold mb-2">Cash Flow by Day</h2>
+          <Line data={lineData} height={200} />
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default Analyst;
+
+

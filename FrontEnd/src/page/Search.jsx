@@ -40,8 +40,8 @@ const Search = () => {
       .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
   };
 
-  const totalIncome = calculateTotal("Income");
-  const totalOutcome = calculateTotal("Expense");
+  const totalIncome = calculateTotal("income");
+  const totalOutcome = calculateTotal("expense");
   const totalBalance = totalIncome - totalOutcome;
 
   return (
@@ -93,14 +93,14 @@ const Search = () => {
                   <td className="py-2 px-4 text-center">{(item.date || item.transaction_date).slice(0, 10)}</td>
                   <td
                     className={`py-2 px-4 text-center ${
-                      item.type === "Expense" ? "text-red-500" : "text-green-500"
+                      item.type === "expense" ? "text-red-500" : "text-green-500"
                     }`}
                   >
                     ${Number(item.amount).toFixed(2)}
                   </td>
                   <td
                     className={`py-2 px-4 text-center ${
-                      item.type === "Income" ? "text-green-500" : "text-red-500"
+                      item.type === "income" ? "text-green-500" : "text-red-500"
                     }`}
                   >
                     {item.type}

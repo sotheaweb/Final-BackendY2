@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { TbListDetails } from "react-icons/tb";
 import axios from "axios";
@@ -45,12 +46,12 @@ const ShowContent = ({ expenses, setExpenses }) => {
                 <td className="py-3 px-6 text-left">{item.title}</td>
                 <td className="py-3 px-6 text-left">{item.transaction_date?.slice(0, 10)}</td>
                 <td className="py-3 px-6 text-left">{item.remark}</td>
-                <td className={`py-3 px-6 text-left ${item.type == "Expense" ? "text-red-500" : "text-green-500"}`}>
+                <td className={`py-3 px-6 text-left ${item.type == "expense" ? "text-red-500" : "text-green-500"}`}>
                   ${Math.abs(item.amount)}
                 </td>
                 <td className="py-3 px-6 text-left">
                   <span className={`px-2 py-1 text-xs font-semibold rounded ${
-                    item.type === "Income" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
+                    item.type === "income" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
                   }`}>
                     {item.type}
                   </span>
@@ -62,7 +63,9 @@ const ShowContent = ({ expenses, setExpenses }) => {
                       <button onClick={() => deleteTransaction(item.id)} className="cursor-pointer"><MdDelete /></button>
                     </div>
                     <div className="text-2xl text-sky-300 ">
-                      <button className="cursor-pointer"><TbListDetails /></button>
+                      <Link to={`/update/${item.id}`} className="text-2xl text-sky-300">
+                        <TbListDetails />
+                      </Link>
                     </div>
                   </div>
                 </td>

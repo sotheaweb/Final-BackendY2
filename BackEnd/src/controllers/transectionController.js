@@ -26,6 +26,22 @@ export const createTransaction = async (req, res) => {
   }
 };
 
+//Update transaction
+export const updateTransaction = async (req, res) => {
+  try {
+    const updated = await transactionService.update(
+      req.params.id,
+      req.body,
+      req.user.id
+    );
+
+    res.json({ message: "Transaction updated successfully", transaction: updated });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+
 // Delete Transaction (you can also restrict to the same user's transaction)
 export const deleteTransaction = async (req, res) => {
   try {

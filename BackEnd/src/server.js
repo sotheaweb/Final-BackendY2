@@ -3,9 +3,9 @@ import { sequelize } from './utils/database.js';
 import cors from 'cors';
 import transectionRuter from './routes/transectionRoute.js';
 import userRouter from './routes/userRouter.js';
+import analystRouter from './routes/analystRoute.js';
 import User from './models/User.js';
 import Transaction from './models/Transaction.js';
-
 
 const app = express();
 const PORT = 8180;
@@ -18,6 +18,9 @@ app.use('/api/transaction', transectionRuter);
 
 //User
 app.use('/api/user', userRouter);
+
+//analyst
+app.use('/api/analyst', analystRouter);
 
 
 const startServer = async () =>{

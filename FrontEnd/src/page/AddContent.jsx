@@ -1,9 +1,11 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 const AddContent = ({expenses, setExpenses}) => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("")
   const [type, setType] = useState("Income")
   const [category, setCategory] = useState("")
@@ -79,6 +81,11 @@ const AddContent = ({expenses, setExpenses}) => {
   useEffect(() =>{
     setCategory(type == "Income" ? "Monthly Income" : "Daily Basis")
   }, [type]);
+
+  const handleCancel = () => {
+    navigate('/');
+  };
+
   return (
     <div className='w-100 h-auto page-size'>
       <div className='w-2xl h-auto control'>
@@ -101,8 +108,8 @@ const AddContent = ({expenses, setExpenses}) => {
                 value={type}
                 onChange={(event) => setType(event.target.value)}
               >
-                <option value="Income">Income</option>
-                <option value="Expense">Expense</option>
+                <option value="Income">income</option>
+                <option value="Expense">expense</option>
               </select>
             </div>
             <div className='mt-5 control-select'>
@@ -148,7 +155,14 @@ const AddContent = ({expenses, setExpenses}) => {
             >   
             </textarea>
           </div>
-          <button type='submit' className='w-30 h-10 bg-blue-600 mt-10 text-gray-100 rounded-sm cursor-pointer hover:bg-blue-900'>Submit</button>
+          <button type='submit' className='w-[10vw] h-10 bg-blue-600 mt-10 text-gray-100 rounded-sm cursor-pointer hover:bg-blue-900'>Submit</button>
+          <button
+            type="button"
+            onClick={handleCancel}
+            className="flex-1 bg-gray-300 text-gray-700 py-2 rounded hover:bg-gray-400 ml-10 w-[10vw] cursor-pointer"
+          >
+            Cancel
+          </button>
         </form>
       </div>
     </div>
@@ -156,3 +170,5 @@ const AddContent = ({expenses, setExpenses}) => {
 }
 
 export default AddContent;
+
+

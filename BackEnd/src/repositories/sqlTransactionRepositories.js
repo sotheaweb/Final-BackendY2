@@ -11,6 +11,16 @@ export const createTransaction = async (data) => {
   return await Transaction.create(data);
 };
 
+//update transaction
+export const updateTransaction = async (id, updatedData) => {
+  const transaction = await Transaction.findByPk(id);
+  if (!transaction) return null;
+
+  await transaction.update(updatedData);
+  return transaction;
+};
+
+
 export const deleteTransaction = async (id) => {
   return await Transaction.destroy({ where: { id } });
 };
